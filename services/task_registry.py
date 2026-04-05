@@ -2,14 +2,37 @@ import os
 import sys
 
 BASE_DIR = "/home/ai/1_Projects/AiAgent_Project/qq_openclaw_bridge"
-DEMO_TASK = os.path.join(BASE_DIR, "qq_console", "scripts", "demo_task.py")
+SCRIPT_DIR = os.path.join(BASE_DIR, "qq_console", "scripts")
+REPORT_DIR = os.path.join(BASE_DIR, "qq_console", "data", "reports")
+
+WEB_CLEAN_MINI = "/home/ai/1_Projects/AiAgent_Project/webclean_mini"
+CODEX_TEST = "/home/ai/1_Projects/AiAgent_Project/codex_test"
+
+PROJECT_SNAPSHOT_SCRIPT = os.path.join(SCRIPT_DIR, "project_snapshot.py")
 
 TASKS = {
-    "demo": {
-        "cmd": [sys.executable, DEMO_TASK],
+    "webclean_snapshot": {
+        "cmd": [
+            sys.executable,
+            PROJECT_SNAPSHOT_SCRIPT,
+            "webclean_mini",
+            WEB_CLEAN_MINI,
+            REPORT_DIR,
+        ],
         "cwd": BASE_DIR,
-        "description": "演示后台任务：每3秒写一条日志，共10次",
-    }
+        "description": "生成 webclean_mini 项目的快照报告",
+    },
+    "codex_test_snapshot": {
+        "cmd": [
+            sys.executable,
+            PROJECT_SNAPSHOT_SCRIPT,
+            "codex_test",
+            CODEX_TEST,
+            REPORT_DIR,
+        ],
+        "cwd": BASE_DIR,
+        "description": "生成 codex_test 项目的快照报告",
+    },
 }
 
 

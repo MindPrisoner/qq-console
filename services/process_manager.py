@@ -81,7 +81,9 @@ def start_task(task_name: str) -> str:
         return f"任务 {task_name} 已经在运行中，pid={old_task.get('pid')}"
 
     ensure_log_dir()
-    log_path = os.path.join(LOG_DIR, f"{task_name}.log")
+
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    log_path = os.path.join(LOG_DIR, f"{task_name}-{timestamp}.log")
 
     log_file = open(log_path, "a", encoding="utf-8")
 

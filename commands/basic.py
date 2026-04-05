@@ -29,6 +29,7 @@ def handle_help() -> str:
         "#pwd - 查看当前工作目录\n"
         "#projects - 查看项目总目录内容\n"
         "#run <任务名> - 启动一个预设任务\n"
+        "  可用任务示例：webclean_snapshot, codex_test_snapshot\n"
         "#ps - 查看任务状态\n"
         "#logs <任务名> - 查看任务最近日志\n"
         "#ask <内容> - 交给 Agent 思考并回复"
