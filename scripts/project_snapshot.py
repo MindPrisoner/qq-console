@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 from pathlib import Path
 from collections import Counter
 from datetime import datetime
@@ -17,43 +18,38 @@ SKIP_DIRS = {
 }
 
 
-def iter_files(root: Path, max_files: int = 5000):
-    count = 0
-    truncated = False
-
-    for dirpath, dirnames, filenames in os.walk(root):
-        dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
-
-        for filename in filenames:
-            yield Path(dirpath) / filename
-            count += 1
-            if count >= max_files:
-                truncated = True
-                return
-
-    return truncated
+def maybe_sleep(seconds: float, label: str):
+    if seconds > 0:
+        print(f"[snapshot] {label}，等待 {seconds} 秒...", flush=True)
+        time.sleep(seconds)
 
 
 def main():
-    if len(sys.argv) != 4:
-        print("用法: python project_snapshot.py <project_name> <project_path> <report_dir>")
+    if len(sys.argv) not in (4, 5):
+        print("用法: python project_snapshot.py <project_name> <project_path> <report_dir> [sleep_seconds]")
         sys.exit(1)
 
     project_name = sys.argv[1]
     project_path = Path(sys.argv[2]).expanduser().resolve()
     report_dir = Path(sys.argv[3]).expanduser().resolve()
+    sleep_seconds = float(sys.argv[4]) if len(sys.argv) == 5 else 0.0
 
-    print(f"[snapshot] project_name={project_name}")
-    print(f"[snapshot] project_path={project_path}")
+    print(f"[snapshot] project_name={project_name}", flush=True)
+    print(f"[snapshot] project_path={project_path}", flush=True)
+    print(f"[snapshot] sleep_seconds={sleep_seconds}", flush=True)
 
     if not project_path.exists():
-        print("[snapshot] ERROR: 项目目录不存在")
+        print("[snapshot] ERROR: 项目目录不存在", flush=True)
         sys.exit(1)
+
+    maybe_sleep(sleep_seconds, "准备扫描项目")
 
     top_level_items = []
     for item in sorted(project_path.iterdir(), key=lambda p: p.name.lower()):
         name = item.name + ("/" if item.is_dir() else "")
         top_level_items.append(name)
+
+    maybe_sleep(sleep_seconds, "顶层目录扫描完成")
 
     ext_counter = Counter()
     readmes = []
@@ -80,6 +76,8 @@ def main():
 
         if truncated:
             break
+
+    maybe_sleep(sleep_seconds, "文件统计完成")
 
     report_dir.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -131,23 +129,25 @@ def main():
     with open(report_path, "w", encoding="utf-8") as f:
         f.write("\n".join(report_lines))
 
-    print("[snapshot] 顶层目录：")
-    for item in top_level_items[:20]:
-        print(f"  - {item}")
+    maybe_sleep(sleep_seconds, "报告写入完成")
 
-    print("[snapshot] README：")
+    print("[snapshot] 顶层目录：", flush=True)
+    for item in top_level_items[:20]:
+        print(f"  - {item}", flush=True)
+
+    print("[snapshot] README：", flush=True)
     if readmes:
         for item in readmes:
-            print(f"  - {item}")
+            print(f"  - {item}", flush=True)
     else:
-        print("  - 未发现 README")
+        print("  - 未发现 README", flush=True)
 
-    print("[snapshot] 文件类型统计 Top 10：")
+    print("[snapshot] 文件类型统计 Top 10：", flush=True)
     for ext, count in ext_counter.most_common(10):
-        print(f"  - {ext}: {count}")
+        print(f"  - {ext}: {count}", flush=True)
 
-    print(f"[snapshot] report_path={report_path}")
-    print("[snapshot] done")
+    print(f"[snapshot] report_path={report_path}", flush=True)
+    print("[snapshot] done", flush=True)
 
 
 if __name__ == "__main__":

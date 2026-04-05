@@ -22,6 +22,18 @@ TASKS = {
         "cwd": BASE_DIR,
         "description": "生成 webclean_mini 项目的快照报告",
     },
+    "webclean_snapshot_slow": {
+        "cmd": [
+            sys.executable,
+            PROJECT_SNAPSHOT_SCRIPT,
+            "webclean_mini",
+            WEB_CLEAN_MINI,
+            REPORT_DIR,
+            "5",
+        ],
+        "cwd": BASE_DIR,
+        "description": "生成 webclean_mini 项目的慢速快照报告（便于测试 stop）",
+    },
     "codex_test_snapshot": {
         "cmd": [
             sys.executable,

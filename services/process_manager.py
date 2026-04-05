@@ -1,4 +1,5 @@
 import os
+import signal
 import subprocess
 from datetime import datetime
 
@@ -129,6 +130,33 @@ def list_task_statuses() -> str:
             f"- {name}: {task.get('status', 'unknown')} (pid={task.get('pid', '-')})"
         )
     return "\n".join(lines)
+
+
+def stop_task(task_name: str) -> str:
+    task = refresh_task_status(task_name)
+    if not task:
+        return f"没有找到任务：{task_name}"
+
+    status = task.get("status", "unknown")
+    pid = task.get("pid")
+
+    if status != "running" or not pid:
+        return f"任务 {task_name} 当前不在运行中。"
+
+    try:
+        os.kill(pid, signal.SIGTERM)
+        task["status"] = "stopped"
+        task["finished_at"] = now_str()
+        set_task(task_name, task)
+        return f"任务已停止：{task_name} (pid={pid})"
+    except ProcessLookupError:
+        task["status"] = "finished"
+        task["finished_at"] = now_str()
+        set_task(task_name, task)
+        return f"任务 {task_name} 实际已结束，无需停止。"
+    except Exception as e:
+        return f"停止任务失败：{task_name}，错误：{e}"
+
 
 
 def read_task_logs(task_name: str, last_n: int = 20) -> str:

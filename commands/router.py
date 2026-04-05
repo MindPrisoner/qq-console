@@ -8,6 +8,7 @@ from qq_console.commands.tasks import (
     handle_ps,
     handle_logs,
     handle_run,
+    handle_stop,
 )
 
 
@@ -48,6 +49,12 @@ def route_command(text: str) -> tuple[str, str]:
         if not task_name:
             return "direct", "用法：#run <任务名>"
         return "direct", handle_run(task_name)
+
+    if text.startswith("#stop "):
+        task_name = text[len("#stop "):].strip()
+        if not task_name:
+            return "direct", "用法：#stop <任务名>"
+        return "direct", handle_stop(task_name)
 
     if text.startswith("#ask "):
         prompt = text[len("#ask "):].strip()

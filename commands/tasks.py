@@ -2,6 +2,7 @@ from qq_console.services.process_manager import (
     list_task_statuses,
     read_task_logs,
     start_task,
+    stop_task,
 )
 
 
@@ -15,3 +16,7 @@ def handle_logs(task_name: str) -> str:
 
 def handle_run(task_name: str) -> str:
     return start_task(task_name)
+
+
+def handle_stop(task_name: str) -> str:
+    return stop_task(task_name)
