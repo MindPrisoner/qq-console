@@ -182,11 +182,6 @@ QQ_APP_ID=your_app_id
 QQ_APP_SECRET=your_app_secret
 ```
 
-> 注意：
-> - 不要把真实的 `AppSecret` 提交到 GitHub
-> - 建议把 `.env.qqconsole` 加入 `.gitignore`
-
----
 
 ## 6. OpenClaw 相关要求
 
