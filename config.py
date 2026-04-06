@@ -17,3 +17,9 @@ TASK_STORE_PATH = f"{DATA_DIR}/tasks.json"
 
 TIMEZONE = "Asia/Shanghai"
 OPENCLAW_AGENT = "qqconsole"
+
+PROJECT_MAP = {
+    "webclean_mini": "/home/ai/1_Projects/AiAgent_Project/webclean_mini",
+    "codex_test": "/home/ai/1_Projects/AiAgent_Project/codex_test",
+    "codex_study_sprint": "/home/ai/1_Projects/AiAgent_Project/codex_study_sprint",
+}

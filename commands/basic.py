@@ -33,7 +33,8 @@ def handle_help() -> str:
         "#ps - 查看任务状态\n"
         "#logs <任务名> - 查看任务最近日志\n"
         "#stop <任务名> - 停止一个正在运行的任务\n"
-        "#ask <内容> - 交给 Agent 思考并回复"
+        "#code <项目名> <任务描述> - 交给 Codex 做只读分析\n"
+        "#ask <内容> - 交给 OpenClaw 思考并回复"
     )
 
 
